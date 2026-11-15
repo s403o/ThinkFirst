@@ -1,13 +1,13 @@
-# mentor-skill
+# ThinkFirst
 
 A Claude Code skill that teaches you instead of writing your code.
 
 ## Install (1 minute)
 
 ```bash
-git clone https://github.com/s403o/mentor-skill.git
+git clone https://github.com/s403o/ThinkFirst.git
 mkdir -p ~/.claude/skills/mentor
-cp mentor-skill/skills/mentor/SKILL.md ~/.claude/skills/mentor/
+cp ThinkFirst/skills/mentor/SKILL.md ~/.claude/skills/mentor/
 ```
 
 Restart Claude Code. Then type:
