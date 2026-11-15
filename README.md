@@ -47,11 +47,10 @@ For a topic you don't know yet. Mental model before code.
 **80/20 (default).** Based on the Pareto principle: about 20% of the concepts give about 80% of the results. Claude teaches only that core:
 
 1. The problem the topic solves, with one analogy
-2. The 3 to 5 vital concepts: what, why, when, with an analogy or real-world example
+2. The 3 to 5 vital concepts: what, why, when
 3. One ASCII diagram of how they fit together
-4. One real-world scenario where the concepts work together
-5. How it links to what you already know
-6. A "skip for now" list of what was left out on purpose
+4. How it links to what you already know
+5. A "skip for now" list of what was left out on purpose
 
 **Deep (`--deep`).** All building blocks, the full lifecycle, a real-world scenario, comparisons, edge cases, and pitfalls.
 
