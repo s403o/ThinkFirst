@@ -2,7 +2,7 @@
 
 A Claude Code skill that makes the AI teach you instead of doing the work for you.
 
-You write the code. Claude asks questions, gives hints that escalate step by step, reviews what you wrote, and keeps a log of your weak areas.
+You write the code. Claude teaches new topics with a mental model first, asks questions, gives hints that escalate step by step, reviews what you wrote, and keeps a log of your weak areas.
 
 ## Why
 
@@ -22,19 +22,48 @@ Restart Claude Code. The skill only runs when you type `/mentor`.
 
 | Command | What it does |
 |---|---|
-| `/mentor <topic>` | Start or switch to a problem |
+| `/mentor <topic>` | Solve a problem with Socratic hints |
+| `/mentor learn <topic>` | Learn a new topic; 80/20 by default |
+| `/mentor learn <topic> --deep` | Learn a topic in full detail |
 | `/mentor review` | Review the code you just wrote |
 | `/mentor fast` | Urgent work; leave mentor mode for this problem |
 | `/mentor log` | Show your weak areas |
 | `/mentor exit` | End the session with a short recap |
 
-Example:
+Examples:
 
 ```
+/mentor learn kubernetes services
+/mentor learn go concurrency --deep
 /mentor my goroutines hang when the channel is closed
 ```
 
-## How it works
+## Two modes
+
+### Learn mode: understand first
+
+For a topic you don't know yet. Mental model before code.
+
+**80/20 (default).** Based on the Pareto principle: about 20% of the concepts give about 80% of the results. Claude teaches only that core:
+
+1. The problem the topic solves, with one analogy
+2. The 3 to 5 vital concepts: what, why, when
+3. One ASCII diagram of how they fit together
+4. How it links to what you already know
+5. A "skip for now" list of what was left out on purpose
+
+**Deep (`--deep`).** All building blocks, the full lifecycle, a real-world scenario, comparisons, edge cases, and pitfalls.
+
+Both are Socratic around the teaching:
+
+- **Before:** Claude asks what you think the topic solves, and starts from your answer.
+- **After:** no "do you understand?". You get 2 or 3 questions that only someone who understands can answer. A wrong answer gets a follow-up question before any correction.
+- **Then:** one small exercise you build yourself, in solve mode.
+- **Finally:** an optional reference card saved to `~/.claude/mentor_notes/<topic>.md`.
+
+### Solve mode: think it through
+
+For a problem you are working on.
 
 **Context first.** Before any hint, Claude asks what you are trying to do, what you tried, and what you think the error means.
 
@@ -48,20 +77,28 @@ Example:
 | 4. Mechanism | Explains how it works, in plain language |
 | 5. Scaffold | Pseudocode or a skeleton with `___` blanks; you fill them |
 
+If the problem shows a missing foundation, Claude offers `/mentor learn` for that concept first.
+
 **Guess check.** If you guess, Claude asks for your reasoning before confirming.
 
 **Syntax exception.** Ask for syntax only and you get a generic example of max 3 lines, never your solution.
 
-**Review.** When your code works, Claude asks questions on correctness, security, performance, and readability. It does not fix anything.
+## Review
 
-**Fast mode.** For production issues or deadlines, `/mentor fast` leaves mentor mode for one problem. The topic is logged as `Debt` so you can come back to it.
+When your code works, Claude asks questions on correctness, security, performance, and readability. It does not fix anything.
 
-**Weak area log.** After each problem, Claude appends to `~/.claude/mentor_log.md`:
+## Fast mode
+
+For production issues or deadlines, `/mentor fast` leaves mentor mode for one problem. The topic is logged as `Debt` so you can come back to it.
+
+## Weak area log
+
+After each problem or topic, Claude appends to `~/.claude/mentor_log.md`:
 
 ```markdown
-## 2026-11-10 | Go channels
+## 2026-11-15 | Go channels | solve
 - Weak: channel close semantics (Tier 3+)
-- Solid: select with default (self-solved, Tier 1-2)
+- Solid: select with default (self-solved)
 ```
 
 Over time this file shows where your understanding is thin.
@@ -71,13 +108,16 @@ Over time this file shows where your understanding is thin.
 - Write or edit files in your project
 - Give a complete solution, even as an "example"
 - Give in to "just tell me"; it offers the next hint tier instead
+- Skip the understanding check in learn mode
 
 ## Credits
 
-This skill merges ideas from two MIT-licensed projects:
+This skill merges ideas from:
 
-- [ahmealy/mentor-agent-skill](https://github.com/ahmealy/mentor-agent-skill): base structure, hint tiers, guess check, weak area log
-- [Sensei - Junior Mentor](https://github.com/github/awesome-copilot/blob/main/agents/mentoring-juniors.agent.md) from [github/awesome-copilot](https://github.com/github/awesome-copilot) by Thomas Chmara and François Descamps: context gathering, scaffold hints, review axes, urgency mode, session recap
+- [ahmealy/mentor-agent-skill](https://github.com/ahmealy/mentor-agent-skill) (MIT): base structure, hint tiers, guess check, weak area log
+- [Sensei - Junior Mentor](https://github.com/github/awesome-copilot/blob/main/agents/mentoring-juniors.agent.md) from [github/awesome-copilot](https://github.com/github/awesome-copilot) (MIT) by Thomas Chmara and François Descamps: context gathering, scaffold hints, review axes, urgency mode, session recap
+- A community "mental model first" learning methodology: teaching principles and the structure of learn mode
+- The 80/20 (Pareto) learning rule: the default depth of learn mode
 
 ## Contributing
 
